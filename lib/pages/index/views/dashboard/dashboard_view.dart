@@ -16,12 +16,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Currex'),
-      ),
-      body: _View(this),
-    );
+    return _View(this);
   }
 
   void addToDashboard() {}

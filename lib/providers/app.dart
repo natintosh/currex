@@ -5,13 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 class AppProvider extends ChangeNotifier {
-  AppProvider() : super() {}
+  AppProvider() : super();
 
   Map<String, CurrencyModel> _currencies = Map();
 
   Map<String, CurrencyModel> get currencies => _currencies;
-
-  // Future<List<Map<String, RateFluctuationModel>>> _rateFluctuation = [];
 
   void loadCurrencies(BuildContext context) async {
     String data = await DefaultAssetBundle.of(context)

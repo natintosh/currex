@@ -1,5 +1,6 @@
 import 'package:currex/pages/index/index_page.dart';
 import 'package:currex/providers/app.dart';
+import 'package:currex/providers/rates.dart';
 import 'package:currex/utils/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,12 +29,17 @@ class App extends StatelessWidget {
 
         return MultiProvider(
           providers: [
-            ChangeNotifierProvider(
+            ChangeNotifierProvider<AppProvider>(
               create: (_) {
                 return AppProvider()..initialise(context);
               },
               lazy: false,
-            )
+            ),
+            ChangeNotifierProvider<RatesProvider>(
+              create: (_) {
+                return RatesProvider()..getRateFluctuatioon();
+              },
+            ),
           ],
           child: Scaffold(
             key: globalScaffoldKey,

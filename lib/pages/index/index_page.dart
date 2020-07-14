@@ -52,9 +52,9 @@ class _IndexView extends WidgetView<IndexPage, _IndexPageState> {
       key: IndexPage.indexScaffoldKey,
       resizeToAvoidBottomPadding: false,
       extendBody: true,
-      // appBar: AppBar(
-      //   title: Text('Currexp'),
-      // ),
+      appBar: AppBar(
+        title: Text('Currexp'),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: CupertinoColors.systemGrey4.withOpacity(0.9),
         elevation: 0.0,
