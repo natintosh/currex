@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:currex/pages/index/views/dashboard/dashboard_view.dart';
 import 'package:currex/pages/index/views/exchange/exchange_view.dart';
+import 'package:currex/pages/settings/settings_page.dart';
 import 'package:currex/utils/widget_view/widget_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,10 @@ class _IndexPageState extends State<IndexPage> {
       currentIndex = value;
     });
   }
+
+  void openSettingsPage() {
+    Navigator.pushNamed(context, SettingsPage.SettingsPageRouteName);
+  }
 }
 
 class _IndexView extends WidgetView<IndexPage, _IndexPageState> {
@@ -54,6 +59,13 @@ class _IndexView extends WidgetView<IndexPage, _IndexPageState> {
       extendBody: true,
       appBar: AppBar(
         title: Text('Currexp'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: state.openSettingsPage,
+            tooltip: 'Settings',
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: CupertinoColors.systemGrey4.withOpacity(0.9),

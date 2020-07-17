@@ -1,4 +1,5 @@
 import 'package:currex/pages/index/index_page.dart';
+import 'package:currex/pages/settings/settings_page.dart';
 import 'package:currex/providers/app.dart';
 import 'package:currex/providers/rates.dart';
 import 'package:currex/utils/themes/themes.dart';
@@ -57,6 +58,9 @@ class App extends StatelessWidget {
     switch (settings.name) {
       case IndexPage.IndexPageRouteName:
         builder = IndexPage();
+        break;
+      case SettingsPage.SettingsPageRouteName:
+        builder = SettingsPage();
         break;
     }
 
