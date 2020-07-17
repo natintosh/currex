@@ -31,16 +31,21 @@ class App extends StatelessWidget {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider<AppProvider>(
+              lazy: false,
               create: (_) {
                 return AppProvider()..initialise(context);
               },
+            ),
+            ChangeNotifierProxyProvider<AppProvider, RatesProvider>(
               lazy: false,
-            ),
-            ChangeNotifierProvider<RatesProvider>(
-              create: (_) {
-                return RatesProvider()..getRateFluctuatioon();
+              create: (context) {
+                return RatesProvider();
               },
-            ),
+              update: (context, value, previous) {
+                return previous
+                  ..getRateFluctuatioon(base: value.defaultCurrency.code);
+              },
+            )
           ],
           child: Scaffold(
             key: globalScaffoldKey,

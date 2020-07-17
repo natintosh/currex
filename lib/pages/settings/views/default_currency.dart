@@ -77,6 +77,7 @@ class _DefaultCurrencyView
       child: Scrollbar(
         controller: state.scrollController,
         child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           controller: state.scrollController,
           shrinkWrap: true,
           children: <Widget>[

@@ -20,13 +20,13 @@ class RatesProvider extends ChangeNotifier {
 
   RatesState get state => _state;
 
-  void getRateFluctuatioon() async {
+  void getRateFluctuatioon({String base}) async {
     updateRateState(RatesState.Loading);
 
     final startDate = DateFormat('y-MM-dd').format(DateTime.now());
     final endDate = DateFormat('y-MM-dd')
         .format(DateTime.now().subtract(Duration(hours: 24)));
-    final base = 'NGN';
+    // final base = 'NGN';
 
     print('\n\n\n Start Date: $startDate \n\n\n End Date: $endDate \n\n\n');
 

@@ -20,12 +20,6 @@ class AppProvider extends ChangeNotifier {
 
   Map<String, CurrencyModel> get currencies => _currencies;
 
-  void openBoxes() async {
-    await Hive.initFlutter();
-    Hive.registerAdapter(CurrencyModelAdapter());
-    await Hive.openBox(APP_PREFERENCE);
-  }
-
   void loadCurrencies(BuildContext context) async {
     String data = await DefaultAssetBundle.of(context)
         .loadString('assets/json/currencies.json');
@@ -44,7 +38,7 @@ class AppProvider extends ChangeNotifier {
 
   void initialise(BuildContext context) {
     this.loadCurrencies(context);
-    this.openBoxes();
+    // this.openBoxes();
   }
 
   CurrencyModel get defaultCurrency {
