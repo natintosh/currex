@@ -1,6 +1,8 @@
+import 'package:currex/models/currency/currency_model.dart';
 import 'package:currex/models/rate_fluctuation/rate_fluctuation_model.dart';
 import 'package:currex/services/exchange_rate.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
@@ -10,8 +12,13 @@ enum RatesState {
   Initial,
 }
 
+const String USER_SUBSCRIPTION_KEY = 'subscription-box';
+const String SUBSCRIPTION_KEY = 'subscription';
+
 class RatesProvider extends ChangeNotifier {
   RatesState _state = RatesState.Initial;
+
+  Box get subscriptionBox => Hive.box(SUBSCRIPTION_KEY);
 
   Tuple2<bool, List<Map<String, RateFluctuationModel>>> _rateFluctuation;
 
@@ -41,6 +48,21 @@ class RatesProvider extends ChangeNotifier {
 
   void updateRateState(RatesState state) {
     _state = state;
+    notifyListeners();
+  }
+
+  List<CurrencyModel> get subscriptions {
+    List<CurrencyModel> subscriptions = subscriptionBox
+        .get(SUBSCRIPTION_KEY, defaultValue: []) as List<CurrencyModel>;
+
+    return subscriptions;
+  }
+
+  set subscriptions(List<CurrencyModel> subscription) {
+    List<CurrencyModel> _subscription = subscriptions..addAll(subscription);
+    subscriptionBox.put(SUBSCRIPTION_KEY, [
+      ...{..._subscription}
+    ]);
     notifyListeners();
   }
 }

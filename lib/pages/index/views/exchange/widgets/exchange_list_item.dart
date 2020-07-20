@@ -40,9 +40,9 @@ class ExchangeListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
+      margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      color: Theme.of(context).cardColor,
       child: InkWell(
         onTap: onTap,
         child: Container(

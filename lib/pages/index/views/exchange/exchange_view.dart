@@ -44,12 +44,16 @@ class _ExchangeViewState extends State<ExchangeView> {
       ),
       builder: (context) {
         return CurrencyDetailsView(
-            rateModel: rateModel,
-            currencyCode: currencyCode,
-            isTracked: isTracked);
+          rateModel: rateModel,
+          currencyCode: currencyCode,
+          isTracked: isTracked,
+          onSubscribe: onSubscribe,
+        );
       },
     );
   }
+
+  void onSubscribe() {}
 }
 
 class _View extends WidgetView<ExchangeView, _ExchangeViewState> {

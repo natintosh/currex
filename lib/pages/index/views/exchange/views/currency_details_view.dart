@@ -14,12 +14,14 @@ class CurrencyDetailsView extends StatefulWidget {
   final RateFluctuationModel rateModel;
   final String currencyCode;
   final bool isTracked;
+  final VoidCallback onSubscribe;
 
   const CurrencyDetailsView({
     Key key,
     @required this.rateModel,
     @required this.currencyCode,
     @required this.isTracked,
+    @required this.onSubscribe,
   }) : super(key: key);
 
   @override
@@ -332,7 +334,7 @@ class _View extends WidgetView<CurrencyDetailsView, _CurrencyDetailsView> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.0),
             child: RaisedButton.icon(
-              onPressed: () {},
+              onPressed: widget.onSubscribe,
               icon: Icon(Icons.notifications),
               label: Text('SUBSCRIBE'),
             ),

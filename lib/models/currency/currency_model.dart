@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -5,7 +6,7 @@ part 'currency_model.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: 0)
-class CurrencyModel {
+class CurrencyModel extends Equatable {
   @JsonKey(name: 'symbol')
   @HiveField(0)
   String symbol;
@@ -42,6 +43,9 @@ class CurrencyModel {
       this.rounding,
       this.code,
       this.namePlural});
+
+  @override
+  List<Object> get props => [code];
 
   factory CurrencyModel.fromJson(Map<String, dynamic> json) =>
       _$CurrencyModelFromJson(json);

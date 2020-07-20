@@ -35,6 +35,7 @@ dependencies:
   country_icons: ^1.1.1
   dio: ^3.0.9
   dio_http_cache: ^0.2.7
+  equatable: ^1.2.2
   fl_chart: ^0.10.1
   google_fonts: ^1.1.0
   hive: ^1.4.1+1
