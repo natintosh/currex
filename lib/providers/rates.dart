@@ -26,9 +26,6 @@ class RatesProvider extends ChangeNotifier {
     final startDate = DateFormat('y-MM-dd').format(DateTime.now());
     final endDate = DateFormat('y-MM-dd')
         .format(DateTime.now().subtract(Duration(hours: 24)));
-    // final base = 'NGN';
-
-    print('\n\n\n Start Date: $startDate \n\n\n End Date: $endDate \n\n\n');
 
     Tuple2<bool, List<Map<String, RateFluctuationModel>>> fluctuation =
         await ExchanegRateService.getFluctuation(

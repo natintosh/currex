@@ -21,7 +21,7 @@ class SettingsCategory extends StatelessWidget {
             ),
           ),
           Ink(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             child: ListView.builder(
               primary: false,
               shrinkWrap: true,

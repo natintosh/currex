@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "4.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.39.11"
+    version: "0.39.10"
   animations:
     dependency: "direct main"
     description:
@@ -288,8 +288,8 @@ packages:
     dependency: "direct main"
     description:
       path: hive_flutter
-      ref: HEAD
-      resolved-ref: d7ee72537a3b7ce1284bcbf5ee5f86e617a4f6fc
+      ref: master
+      resolved-ref: "26301e168b586cfe8873dfc2e0d05ebdf015c80d"
       url: "git://github.com/hivedb/hive.git"
     source: git
     version: "0.3.0+2"

@@ -87,7 +87,7 @@ class _DefaultCurrencyView
                   Text('Search', style: Theme.of(context).textTheme.bodyText1),
             ),
             Container(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: TextField(
                 controller: state.controller,
@@ -109,7 +109,7 @@ class _DefaultCurrencyView
               ),
             ),
             Ink(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               child: ListTile(
                 title: Text(defaultCurrency.code),
                 subtitle: Text(defaultCurrency.namePlural),
@@ -128,7 +128,7 @@ class _DefaultCurrencyView
                     final currency = state.currencies[index];
 
                     return Ink(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       child: Container(
                         child: ListTile(
                           onTap: () => state.updateDefaultCurrency(currency),

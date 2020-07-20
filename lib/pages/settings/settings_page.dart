@@ -1,3 +1,5 @@
+import 'package:currex/models/app_theme/app_theme_model.dart';
+import 'package:currex/models/currency/currency_model.dart';
 import 'package:currex/pages/settings/views/default_currency.dart';
 import 'package:currex/pages/settings/widgets/settings_category.dart';
 import 'package:currex/providers/app.dart';
@@ -23,6 +25,18 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  String get currencyLabel {
+    CurrencyModel value = context.read<AppProvider>().defaultCurrency;
+    return '${value.code} - ${value.namePlural}';
+  }
+
+  String get themeLabel {
+    AppTheme theme = Provider.of<AppProvider>(context).appTheme;
+    return theme == AppTheme.Light
+        ? 'Light'
+        : theme == AppTheme.Dark ? 'Dark' : 'System';
+  }
+
   void onCurrencyTilesPressed() {
     Navigator.push(context, MaterialPageRoute(
       builder: (context) {
@@ -31,7 +45,57 @@ class _SettingsPageState extends State<SettingsPage> {
     ));
   }
 
-  void onThemeTilePressed() {}
+  void onThemeTilePressed() {
+    showThemeDialog();
+  }
+
+  void close() {
+    Navigator.pop(context);
+  }
+
+  void updateTheme(AppTheme theme) {
+    context.read<AppProvider>().appTheme = theme;
+    Navigator.pop(context);
+  }
+
+  void showThemeDialog() {
+    showDialog<AppTheme>(
+      context: context,
+      builder: (BuildContext context) {
+        AppTheme theme =
+            context.select<AppProvider, AppTheme>((value) => value.appTheme);
+
+        return SimpleDialog(
+          title: Text('Theme'),
+          children: <Widget>[
+            RadioListTile<AppTheme>(
+              title: Text('Light'),
+              value: AppTheme.Light,
+              groupValue: theme,
+              onChanged: updateTheme,
+            ),
+            RadioListTile<AppTheme>(
+              title: Text('Dark'),
+              value: AppTheme.Dark,
+              groupValue: theme,
+              onChanged: updateTheme,
+            ),
+            RadioListTile<AppTheme>(
+              title: Text('System'),
+              value: AppTheme.System,
+              groupValue: theme,
+              onChanged: updateTheme,
+            ),
+            ButtonBar(
+              children: <Widget>[
+                FlatButton(onPressed: close, child: Text('CLOSE'))
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _SettingsView extends WidgetView<SettingsPage, _SettingsPageState> {
@@ -50,18 +114,13 @@ class _SettingsView extends WidgetView<SettingsPage, _SettingsPageState> {
               ListTile(
                 leading: Icon(Icons.local_atm),
                 title: Text('Default currency'),
-                subtitle: Text(
-                  context.select<AppProvider, String>(
-                    (value) =>
-                        '${value.defaultCurrency.code} - ${value.defaultCurrency.namePlural}',
-                  ),
-                ),
+                subtitle: Text(state.currencyLabel),
                 onTap: state.onCurrencyTilesPressed,
               ),
               ListTile(
                 leading: Icon(Icons.style),
                 title: Text('Theme'),
-                subtitle: Text('Light'),
+                subtitle: Text(state.themeLabel),
                 onTap: state.onThemeTilePressed,
               ),
             ],
