@@ -27,9 +27,9 @@ class _ExchangeViewState extends State<ExchangeView> {
   }
 
   void onTap({
+    CurrencyModel currencyModel,
     RateFluctuationModel rateModel,
     String currencyCode,
-    bool isTracked,
   }) {
     showModalBottomSheet(
       context: context,
@@ -44,16 +44,23 @@ class _ExchangeViewState extends State<ExchangeView> {
       ),
       builder: (context) {
         return CurrencyDetailsView(
+          currencyModel: currencyModel,
           rateModel: rateModel,
           currencyCode: currencyCode,
-          isTracked: isTracked,
           onSubscribe: onSubscribe,
+          onUnsubscribe: onUnsubscribe,
         );
       },
     );
   }
 
-  void onSubscribe() {}
+  void onSubscribe(CurrencyModel currencyModel) {
+    context.read<RatesProvider>().subscriptions = [currencyModel];
+  }
+
+  void onUnsubscribe(CurrencyModel currencyModel) {
+    context.read<RatesProvider>().unSubscribe = currencyModel;
+  }
 }
 
 class _View extends WidgetView<ExchangeView, _ExchangeViewState> {
@@ -97,6 +104,9 @@ class _View extends WidgetView<ExchangeView, _ExchangeViewState> {
                   },
                 );
 
+                bool isTracked = context.select<RatesProvider, bool>(
+                    (value) => value.subscriptions.contains(currency));
+
                 return ExchangeListItem(
                   isoCode: isoCode,
                   currencyCode: currencyCode,
@@ -105,11 +115,11 @@ class _View extends WidgetView<ExchangeView, _ExchangeViewState> {
                   value: values.endRate,
                   change: values.change,
                   changePercentage: values.changePercentage,
-                  isTracked: false,
+                  isTracked: isTracked,
                   onTap: () => state.onTap(
+                    currencyModel: currency,
                     rateModel: values,
                     currencyCode: currencyCode,
-                    isTracked: false, // TODO:
                   ),
                 );
               },

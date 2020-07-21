@@ -1,27 +1,32 @@
 import 'dart:math' as Math;
 
+import 'package:currex/models/currency/currency_model.dart';
 import 'package:currex/models/rate_fluctuation/rate_fluctuation_model.dart';
+import 'package:currex/providers/rates.dart';
 import 'package:currex/services/exchange_rate.dart';
 import 'package:currex/utils/widget_view/widget_view.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sized_context/sized_context.dart';
 import 'package:tuple/tuple.dart';
 
 class CurrencyDetailsView extends StatefulWidget {
+  final CurrencyModel currencyModel;
   final RateFluctuationModel rateModel;
   final String currencyCode;
-  final bool isTracked;
-  final VoidCallback onSubscribe;
+  final ValueChanged<CurrencyModel> onSubscribe;
+  final ValueChanged<CurrencyModel> onUnsubscribe;
 
   const CurrencyDetailsView({
     Key key,
+    @required this.currencyModel,
     @required this.rateModel,
     @required this.currencyCode,
-    @required this.isTracked,
     @required this.onSubscribe,
+    @required this.onUnsubscribe,
   }) : super(key: key);
 
   @override
@@ -333,11 +338,18 @@ class _View extends WidgetView<CurrencyDetailsView, _CurrencyDetailsView> {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.0),
-            child: RaisedButton.icon(
-              onPressed: widget.onSubscribe,
-              icon: Icon(Icons.notifications),
-              label: Text('SUBSCRIBE'),
-            ),
+            child: context.select<RatesProvider, bool>((value) =>
+                    value.subscriptions.contains(widget.currencyModel))
+                ? FlatButton.icon(
+                    onPressed: () => widget.onUnsubscribe(widget.currencyModel),
+                    icon: Icon(Icons.notifications_none),
+                    label: Text('UNSUBSCRIBE'),
+                  )
+                : RaisedButton.icon(
+                    onPressed: () => widget.onSubscribe(widget.currencyModel),
+                    icon: Icon(Icons.notifications),
+                    label: Text('SUBSCRIBE'),
+                  ),
           ),
           SizedBox(
             height: context.heightPct(0.02),

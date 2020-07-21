@@ -18,7 +18,7 @@ const String SUBSCRIPTION_KEY = 'subscription';
 class RatesProvider extends ChangeNotifier {
   RatesState _state = RatesState.Initial;
 
-  Box get subscriptionBox => Hive.box(SUBSCRIPTION_KEY);
+  Box get _subscriptionBox => Hive.box(USER_SUBSCRIPTION_KEY);
 
   Tuple2<bool, List<Map<String, RateFluctuationModel>>> _rateFluctuation;
 
@@ -52,15 +52,23 @@ class RatesProvider extends ChangeNotifier {
   }
 
   List<CurrencyModel> get subscriptions {
-    List<CurrencyModel> subscriptions = subscriptionBox
-        .get(SUBSCRIPTION_KEY, defaultValue: []) as List<CurrencyModel>;
+    List subscriptions =
+        _subscriptionBox.get(SUBSCRIPTION_KEY, defaultValue: []);
 
-    return subscriptions;
+    return List<CurrencyModel>.from(subscriptions);
   }
 
   set subscriptions(List<CurrencyModel> subscription) {
     List<CurrencyModel> _subscription = subscriptions..addAll(subscription);
-    subscriptionBox.put(SUBSCRIPTION_KEY, [
+    _subscriptionBox.put(SUBSCRIPTION_KEY, [
+      ...{..._subscription}
+    ]);
+    notifyListeners();
+  }
+
+  set unSubscribe(CurrencyModel currency) {
+    List<CurrencyModel> _subscription = subscriptions..remove(currency);
+    _subscriptionBox.put(SUBSCRIPTION_KEY, [
       ...{..._subscription}
     ]);
     notifyListeners();
