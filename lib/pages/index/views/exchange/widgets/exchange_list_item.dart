@@ -39,10 +39,10 @@ class ExchangeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
-      color: Theme.of(context).cardColor,
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: InkWell(
         onTap: onTap,
         child: Container(
