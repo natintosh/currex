@@ -43,13 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
-  bezier_chart:
-    dependency: "direct main"
-    description:
-      name: bezier_chart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.17+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -140,7 +133,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.0"
+    version: "3.4.0"
   collection:
     dependency: transitive
     description:
@@ -196,7 +189,7 @@ packages:
       name: dartx
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2"
+    version: "0.5.0"
   dio:
     dependency: "direct main"
     description:
@@ -210,7 +203,7 @@ packages:
       name: dio_http_cache
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.7"
+    version: "0.2.8"
   equatable:
     dependency: "direct main"
     description:
@@ -298,7 +291,7 @@ packages:
     description:
       path: hive_generator
       ref: HEAD
-      resolved-ref: d7ee72537a3b7ce1284bcbf5ee5f86e617a4f6fc
+      resolved-ref: "26301e168b586cfe8873dfc2e0d05ebdf015c80d"
       url: "git://github.com/hivedb/hive.git"
     source: git
     version: "0.7.0+2"
@@ -315,7 +308,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -525,7 +518,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.3+1"
+    version: "4.3.1"
   pub_semver:
     dependency: transitive
     description:
@@ -642,7 +635,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0+1"
+    version: "2.2.0+2"
   term_glyph:
     dependency: transitive
     description:

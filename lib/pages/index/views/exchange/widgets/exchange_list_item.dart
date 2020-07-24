@@ -1,8 +1,10 @@
+import 'package:currex/models/currency/currency_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ExchangeListItem extends StatelessWidget {
+  final CurrencyModel defaultCurrency;
   final String isoCode;
   final String currencyCode;
   final String currencyName;
@@ -15,6 +17,7 @@ class ExchangeListItem extends StatelessWidget {
 
   ExchangeListItem({
     Key key,
+    @required this.defaultCurrency,
     @required this.isoCode,
     @required this.currencyCode,
     @required this.currencyName,
@@ -26,7 +29,10 @@ class ExchangeListItem extends StatelessWidget {
     @required this.onTap,
   }) : super(key: key);
 
-  final numberCurrency = NumberFormat.currency(name: 'NGN', symbol: '\u20A6');
+  NumberFormat get numberCurrency => NumberFormat.currency(
+        name: defaultCurrency.code,
+        symbol: defaultCurrency.symbolNative,
+      );
 
   String _getValue(num value) {
     return numberCurrency.format((1 / value));

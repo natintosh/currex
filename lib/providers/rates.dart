@@ -27,7 +27,7 @@ class RatesProvider extends ChangeNotifier {
 
   RatesState get state => _state;
 
-  void getRateFluctuatioon({String base}) async {
+  void getRateFluctuation({String base}) async {
     updateRateState(RatesState.Loading);
 
     final startDate = DateFormat('y-MM-dd').format(DateTime.now());

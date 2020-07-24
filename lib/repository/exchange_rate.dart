@@ -78,7 +78,7 @@ class ExchangeRateRepository {
     dio.interceptors..add(DioResponseInterceptor());
 
     final path =
-        '?base=$base&start_date=$startDate&end_date=$endDate&symbols=$symbols';
+        '?base=$base&start_date=$startDate&end_date=$endDate&places=$_kDecimalPlaces&symbols=$symbols';
 
     final url = BASE_URL + timeSeriesEndPoint + path;
 

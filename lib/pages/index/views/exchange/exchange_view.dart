@@ -43,7 +43,13 @@ class _ExchangeViewState extends State<ExchangeView> {
         ),
       ),
       builder: (context) {
+        CurrencyModel defaultCurrency =
+            context.select<AppProvider, CurrencyModel>((value) {
+          return value.defaultCurrency;
+        });
+
         return CurrencyDetailsView(
+          defaultCurrency: defaultCurrency,
           currencyModel: currencyModel,
           rateModel: rateModel,
           currencyCode: currencyCode,
@@ -97,6 +103,11 @@ class _View extends WidgetView<ExchangeView, _ExchangeViewState> {
                     currencyCode.substring(0, currencyCode.length - 1);
                 RateFluctuationModel values = data.values.toList()[0];
 
+                CurrencyModel defaultCurrency =
+                    context.select<AppProvider, CurrencyModel>((value) {
+                  return value.defaultCurrency;
+                });
+
                 CurrencyModel currency =
                     context.select<AppProvider, CurrencyModel>(
                   (value) {
@@ -108,6 +119,7 @@ class _View extends WidgetView<ExchangeView, _ExchangeViewState> {
                     (value) => value.subscriptions.contains(currency));
 
                 return ExchangeListItem(
+                  defaultCurrency: defaultCurrency,
                   isoCode: isoCode,
                   currencyCode: currencyCode,
                   currencyName: currency?.namePlural ?? '',

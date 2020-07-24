@@ -1,38 +1,15 @@
-import 'dart:math' as Math;
-
-import 'package:currex/models/currency/currency_model.dart';
-import 'package:currex/models/rate_fluctuation/rate_fluctuation_model.dart';
-import 'package:currex/services/exchange_rate.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sized_context/sized_context.dart';
-import 'package:tuple/tuple.dart';
+import 'dart:math' as Math;
 
-class DashboardItemGraph extends StatefulWidget {
-  final CurrencyModel defaultCurrency;
-  final CurrencyModel currencyModel;
-  final RateFluctuationModel rateModel;
-  final String currencyCode;
-
-  const DashboardItemGraph(
-      {Key key,
-      @required this.defaultCurrency,
-      @required this.currencyModel,
-      @required this.rateModel,
-      @required this.currencyCode})
-      : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _DashboardItemGraphState();
-}
-
-class _DashboardItemGraphState extends State<DashboardItemGraph> {
+class ItemPlaceHolderGraph extends StatelessWidget {
   final dateFormat = DateFormat('y-MM-dd');
 
   static final today = DateTime.now();
 
-  List<DateTime> days = [
+  final List<DateTime> days = [
     today.subtract(Duration(hours: 24 * 6)),
     today.subtract(Duration(hours: 24 * 5)),
     today.subtract(Duration(hours: 24 * 4)),
@@ -42,40 +19,7 @@ class _DashboardItemGraphState extends State<DashboardItemGraph> {
     today.subtract(Duration(hours: 24 * 0)),
   ];
 
-  List<num> timeSeriesData = List.filled(7, 0.0);
-
-  @override
-  void initState() {
-    loadTimeSeries();
-    super.initState();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  void loadTimeSeries() async {
-    String startDate = dateFormat.format(days[days.length - days.length]);
-    String endDate = dateFormat.format(days[days.length - 1]);
-
-    Tuple2<bool, List<num>> data = await ExchanegRateService.getTimeSeries(
-      base: widget.defaultCurrency.code,
-      startDate: startDate,
-      endDate: endDate,
-      symbols: [widget.currencyCode],
-    );
-
-    if (data.item1) {
-      setState(() {
-        timeSeriesData = data.item2;
-      });
-    }
-  }
-
-  bool get isNegative => widget.rateModel.change < 0;
+  final List<num> timeSeriesData = List.filled(7, 0.0);
 
   LineChartData get lineChartData {
     return LineChartData(
@@ -93,7 +37,7 @@ class _DashboardItemGraphState extends State<DashboardItemGraph> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          textStyle: Theme.of(context).textTheme.caption,
+          // textStyle: Theme.of(context).textTheme.caption,
           margin: 10,
           getTitles: (value) {
             switch (value.toInt()) {
@@ -138,7 +82,7 @@ class _DashboardItemGraphState extends State<DashboardItemGraph> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: const Border(
+        border: Border(
           bottom: BorderSide(
             color: Color(0xff4e4965),
             width: 2,
@@ -193,21 +137,14 @@ class _DashboardItemGraphState extends State<DashboardItemGraph> {
             .values
             .toList()
       ],
-      colors: [
-        isNegative
-            ? CupertinoColors.destructiveRed
-            : CupertinoColors.activeGreen
-      ],
+      colors: [CupertinoColors.systemGrey6],
       barWidth: 2,
       isStrokeCapRound: true,
       dotData: FlDotData(
         show: false,
       ),
-      belowBarData: BarAreaData(show: true, colors: [
-        isNegative
-            ? CupertinoColors.destructiveRed.withOpacity(0.2)
-            : CupertinoColors.activeGreen.withOpacity(0.2)
-      ]),
+      belowBarData: BarAreaData(
+          show: true, colors: [CupertinoColors.systemGrey6.withOpacity(0.2)]),
     );
 
     return [

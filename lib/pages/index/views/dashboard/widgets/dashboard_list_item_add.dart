@@ -4,10 +4,10 @@ import 'package:sized_context/sized_context.dart';
 class DashboardListItemAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      margin: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
+      margin: EdgeInsets.zero,
       child: Container(
         padding: EdgeInsets.all(18.0),
         child: Column(

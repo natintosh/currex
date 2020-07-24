@@ -14,6 +14,7 @@ import 'package:sized_context/sized_context.dart';
 import 'package:tuple/tuple.dart';
 
 class CurrencyDetailsView extends StatefulWidget {
+  final CurrencyModel defaultCurrency;
   final CurrencyModel currencyModel;
   final RateFluctuationModel rateModel;
   final String currencyCode;
@@ -22,6 +23,7 @@ class CurrencyDetailsView extends StatefulWidget {
 
   const CurrencyDetailsView({
     Key key,
+    @required this.defaultCurrency,
     @required this.currencyModel,
     @required this.rateModel,
     @required this.currencyCode,
@@ -34,7 +36,11 @@ class CurrencyDetailsView extends StatefulWidget {
 }
 
 class _CurrencyDetailsView extends State<CurrencyDetailsView> {
-  final numberCurrency = NumberFormat.currency(name: 'NGN', symbol: '\u20A6');
+  NumberFormat get numberCurrency => NumberFormat.currency(
+        name: widget.defaultCurrency.code,
+        symbol: widget.defaultCurrency.symbolNative,
+      );
+
   final dateFormat = DateFormat('y-MM-dd');
 
   static final today = DateTime.now();
@@ -49,7 +55,7 @@ class _CurrencyDetailsView extends State<CurrencyDetailsView> {
     today.subtract(Duration(hours: 24 * 0)),
   ];
 
-  List<num> timeSeriesData = List.filled(7, 5.0);
+  List<num> timeSeriesData = List.filled(7, 0.0);
 
   @override
   void initState() {
@@ -71,7 +77,7 @@ class _CurrencyDetailsView extends State<CurrencyDetailsView> {
     String endDate = dateFormat.format(days[days.length - 1]);
 
     Tuple2<bool, List<num>> data = await ExchanegRateService.getTimeSeries(
-      base: 'NGN',
+      base: widget.defaultCurrency.code,
       startDate: startDate,
       endDate: endDate,
       symbols: [widget.currencyCode],
@@ -104,6 +110,9 @@ class _CurrencyDetailsView extends State<CurrencyDetailsView> {
   }
 
   LineChartData get lineChartData {
+    print(
+        '\n\n\n maxY: ${maxY(timeSeriesData.reduce(Math.max))}, minY: ${minY(timeSeriesData.reduce(Math.min))}, \n\n\n');
+
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
@@ -183,10 +192,26 @@ class _CurrencyDetailsView extends State<CurrencyDetailsView> {
       ),
       minX: 0,
       maxX: 8,
-      maxY: 1 / timeSeriesData.reduce(Math.max),
-      minY: 1 / timeSeriesData.reduce(Math.min),
+      maxY: maxY(timeSeriesData.reduce(Math.max)),
+      minY: minY(timeSeriesData.reduce(Math.min)),
       lineBarsData: linesBarData1(),
     );
+  }
+
+  double maxY(double max) {
+    if (max == 0) return 0.0;
+
+    double value = 1 / max;
+
+    return value;
+  }
+
+  double minY(double min) {
+    if (min == 0) return 0.0;
+
+    double value = 1 / min;
+
+    return value;
   }
 
   List<LineChartBarData> linesBarData1() {

@@ -31,7 +31,6 @@ dependencies:
 
   analyzer: 0.39.10
   animations: ^1.1.1
-  bezier_chart: ^1.0.17+1
   country_icons: ^1.1.1
   dio: ^3.0.9
   dio_http_cache: ^0.2.7

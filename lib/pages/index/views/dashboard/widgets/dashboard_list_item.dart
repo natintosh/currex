@@ -1,39 +1,57 @@
+import 'package:currex/models/currency/currency_model.dart';
+import 'package:currex/models/rate_fluctuation/rate_fluctuation_model.dart';
 import 'package:currex/pages/index/views/dashboard/widgets/dashboard_item_graph.dart';
+import 'package:currex/pages/index/views/dashboard/widgets/item_placeholder.dart';
+import 'package:currex/services/exchange_rate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sized_context/sized_context.dart';
+import 'package:tuple/tuple.dart';
 
 class DashboardListItem extends StatelessWidget {
-  final String isoCode;
-  final String countryShortName;
-  final String currencyName;
-  final String currencySymbol;
-  final double buyValue;
-  final double sellValue;
-  final double changes;
-  final List<double> previousValues;
+  final CurrencyModel defaultCurrency;
+  final CurrencyModel currencyModel;
   final VoidCallback onTap;
   final VoidCallback onMoreOptionTap;
 
   DashboardListItem({
     Key key,
-    @required this.isoCode,
-    @required this.countryShortName,
-    @required this.currencyName,
-    @required this.currencySymbol,
-    @required this.buyValue,
-    @required this.sellValue,
-    @required this.previousValues,
-    @required this.changes,
+    @required this.defaultCurrency,
+    @required this.currencyModel,
     @required this.onTap,
     @required this.onMoreOptionTap,
   }) : super(key: key);
+
+  NumberFormat get numberCurrency => NumberFormat.currency(
+      name: defaultCurrency.code, symbol: defaultCurrency.symbolNative);
+
+  final dateFormat = DateFormat('y-MM-dd');
+
+  final startDate = DateTime.now().subtract(Duration(hours: 24 * 0));
+  final endDate = DateTime.now().subtract(Duration(hours: 24 * 1));
+
+  String get currencyCode => currencyModel.code;
+
+  String get currencyName => currencyModel.namePlural;
+
+  String get isoCode => currencyCode.substring(0, currencyCode.length - 1);
+
+  String value(double value) {
+    return numberCurrency.format(1 / value);
+  }
+
+  String changes(num changes) {
+    return '${changes < 0 ? '\u2193' : '\u2191'} ' +
+        changes.toStringAsPrecision(2);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      margin: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
+      margin: EdgeInsets.only(top: 8.0, bottom: 4.0, left: 8.0, right: 8.0),
       child: Container(
         padding: EdgeInsets.all(18.0),
         child: Row(
@@ -50,80 +68,103 @@ class DashboardListItem extends StatelessWidget {
                 ),
               ),
               child: Image.asset(
-                'packages/country_icons/icons/flags/png/${isoCode.toLowerCase()}.png',
+                'assets/flags/${isoCode.toLowerCase()}.png',
                 fit: BoxFit.cover,
               ),
             ),
             SizedBox(width: 18.0),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            countryShortName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                .copyWith(fontWeight: FontWeight.w300),
-                          ),
-                          Text(
-                            currencyName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                .copyWith(fontWeight: FontWeight.w300),
-                          )
-                        ],
+                      Text(
+                        currencyCode,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            .copyWith(fontWeight: FontWeight.w300),
                       ),
+                      Text(
+                        currencyName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            .copyWith(fontWeight: FontWeight.w300),
+                      )
                     ],
                   ),
                   SizedBox(
                     height: context.widthPct(0.025),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Value'),
-                          Text('$currencySymbol$buyValue'),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Changes'),
-                          Text(
-                            '$changes',
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                .copyWith(
-                                    color: changes < 0
-                                        ? CupertinoColors.destructiveRed
-                                        : CupertinoColors.activeGreen),
-                          )
-                        ],
-                      ),
-                      Container(),
-                    ],
+                  FutureBuilder<
+                      Tuple2<bool, List<Map<String, RateFluctuationModel>>>>(
+                    future: ExchanegRateService.getFluctuation(
+                      startDate: dateFormat.format(startDate),
+                      endDate: dateFormat.format(endDate),
+                      base: defaultCurrency.code,
+                      symbols: [currencyCode],
+                    ),
+                    builder: (context, builder) {
+                      if (!builder.hasData) return ItemPlaceHolder(); // TODO:
+                      if (builder.hasError) return Container(); // TODO:
+
+                      RateFluctuationModel rateModel =
+                          builder.data.item2[0].values.toList()[0];
+
+                      return Container(
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '${value(rateModel.endRate)}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          .copyWith(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                    Text(
+                                      '${changes(rateModel.change)}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                              color:
+                                                  rateModel.changePercentage < 0
+                                                      ? CupertinoColors
+                                                          .destructiveRed
+                                                      : CupertinoColors
+                                                          .activeGreen),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: context.widthPct(0.025),
+                            ),
+                            DashboardItemGraph(
+                              currencyCode: currencyCode,
+                              currencyModel: currencyModel,
+                              rateModel: rateModel,
+                              defaultCurrency: defaultCurrency,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                  SizedBox(
-                    height: context.widthPct(0.025),
-                  ),
-                  DashboardItemGraph(),
                 ],
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: onMoreOptionTap,
             ),
           ],
         ),

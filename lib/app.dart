@@ -55,7 +55,8 @@ class App extends StatelessWidget {
                   },
                   update: (context, value, previous) {
                     return previous
-                      ..getRateFluctuatioon(base: value.defaultCurrency.code);
+                      ..getRateFluctuation(
+                          base: value.defaultCurrency?.code ?? '');
                   },
                 )
               ],
