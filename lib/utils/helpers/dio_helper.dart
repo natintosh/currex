@@ -15,7 +15,7 @@ class DioHelper {
     Dio dio = Dio(options);
     dio.interceptors
       ..addAll([
-        LogInterceptor(),
+        // LogInterceptor(),
         DioCacheManager(
           CacheConfig(
               baseUrl: BASE_URL,

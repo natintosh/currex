@@ -68,7 +68,6 @@ class _IndexView extends WidgetView<IndexPage, _IndexPageState> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: CupertinoColors.systemGrey4.withOpacity(0.9),
         elevation: 0.0,
         currentIndex: state.currentIndex,
         items: state.bottomNavBarTitles,

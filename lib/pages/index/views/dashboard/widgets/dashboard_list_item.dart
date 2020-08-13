@@ -2,12 +2,12 @@ import 'package:currex/models/currency/currency_model.dart';
 import 'package:currex/models/rate_fluctuation/rate_fluctuation_model.dart';
 import 'package:currex/pages/index/views/dashboard/widgets/dashboard_item_graph.dart';
 import 'package:currex/pages/index/views/dashboard/widgets/item_placeholder.dart';
-import 'package:currex/services/exchange_rate.dart';
+import 'package:currex/providers/rates.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sized_context/sized_context.dart';
-import 'package:tuple/tuple.dart';
 
 class DashboardListItem extends StatelessWidget {
   final CurrencyModel defaultCurrency;
@@ -99,20 +99,23 @@ class DashboardListItem extends StatelessWidget {
                   SizedBox(
                     height: context.widthPct(0.025),
                   ),
-                  FutureBuilder<
-                      Tuple2<bool, List<Map<String, RateFluctuationModel>>>>(
-                    future: ExchanegRateService.getFluctuation(
-                      startDate: dateFormat.format(startDate),
-                      endDate: dateFormat.format(endDate),
-                      base: defaultCurrency.code,
-                      symbols: [currencyCode],
-                    ),
-                    builder: (context, builder) {
-                      if (!builder.hasData) return ItemPlaceHolder(); // TODO:
-                      if (builder.hasError) return Container(); // TODO:
-
+                  Builder(
+                    builder: (context) {
                       RateFluctuationModel rateModel =
-                          builder.data.item2[0].values.toList()[0];
+                          context.select<RatesProvider, RateFluctuationModel>(
+                        (value) {
+                          if (value.rateFluctuation == null) return null;
+
+                          if (!value.rateFluctuation.item1) return null;
+
+                          var item = value.rateFluctuation.item2.firstWhere(
+                              (element) => element.containsKey(currencyCode));
+
+                          return item.values.first;
+                        },
+                      );
+
+                      if (rateModel == null) return ItemPlaceHolder();
 
                       return Container(
                         child: Column(

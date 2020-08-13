@@ -67,17 +67,8 @@ class ItemPlaceHolderGraph extends StatelessWidget {
           },
         ),
         leftTitles: SideTitles(
-          showTitles: true,
-          textStyle: const TextStyle(
-            color: Color(0xff75729e),
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-          getTitles: (value) {
-            return '';
-          },
-          margin: 8,
-          reservedSize: 30,
+          showTitles: false,
+          reservedSize: 0,
         ),
       ),
       borderData: FlBorderData(

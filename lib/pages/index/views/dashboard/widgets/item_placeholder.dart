@@ -22,7 +22,7 @@ class ItemPlaceHolder extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '${currencyModel.symbolNative}---.--',
+                    '${currencyModel?.symbolNative ?? ''}---.--',
                     style: Theme.of(context).textTheme.headline5.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
